@@ -1,23 +1,19 @@
-<script>
+<script setup>
 import { onMounted } from 'vue';
 
-export default {
-  setup() {
-    onMounted(() => {
-      if (window.naver) {
-        const naverLogin = new window.naver.LoginWithNaverId({
-          clientId: 'WN7VQqB2P_bciTlar5yV',
-          callbackUrl: 'http://localhost:5173',
-          isPopup: false,
-          loginButton: { color: 'white', type: 2, height: 40 },
-        });
-        naverLogin.init();
-      } else {
-        console.error('Naver Login SDK not loaded.');
-      }
+onMounted(() => {
+  if (window.naver) {
+    const naverLogin = new window.naver.LoginWithNaverId({
+      clientId: 'WN7VQqB2P_bciTlar5yV',
+      callbackUrl: 'http://localhost:5173',
+      isPopup: false,
+      loginButton: { color: 'white', type: 2, height: 40 },
     });
-  },
-};
+    naverLogin.init();
+  } else {
+    console.error('Naver Login SDK not loaded.');
+  }
+});
 </script>
 
 <template>
