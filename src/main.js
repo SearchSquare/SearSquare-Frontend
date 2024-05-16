@@ -1,6 +1,6 @@
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
-import { KAKAO_API_KEY } from '@/assets/config.js';
+import { KAKAO_API_KEY } from '@/util/config.js';
 
 import App from './App.vue';
 import router from './router';

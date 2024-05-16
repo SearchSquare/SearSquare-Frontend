@@ -13,14 +13,24 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse justify-content-between" id="navbarNavDropdown">
-        <ul class="navbar-nav">
-          <a class="navbar-brand" href="#"
-            ><img src="/src/assets/Logo.png" alt="Map" class="img-fluid" />서치스퀘어</a
-          >
-        </ul>
+        <RouterLink class="navbar-brand" :to="{ name: 'Main' }"
+          ><img
+            src="/src/assets/Logo.png"
+            alt="Map"
+            class="img-logo img-fluid"
+          />서치스퀘어</RouterLink
+        >
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link" href="#">API문서</a>
+            <RouterLink class="nav-link" :to="{ name: 'ApiDocs' }">API문서</RouterLink>
+          </li>
+          <li class="nav-item">
+            <img
+              style="border-radius: 20px"
+              src="/src/assets/Logo.png"
+              alt="Map"
+              class="img-profile img-fluid"
+            />
           </li>
           <li class="nav-item dropdown">
             <a
@@ -30,15 +40,12 @@
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-              <img
-                style="border-radius: 20px"
-                src="/src/assets/Logo.png"
-                alt="Map"
-                class="img-fluid"
-              />
+              Menu
             </a>
             <ul class="dropdown-menu dropdown-menu-end">
-              <li><a class="dropdown-item" href="#">마이페이지</a></li>
+              <li>
+                <RouterLink class="dropdown-item" :to="{ name: 'Mypage' }">마이페이지</RouterLink>
+              </li>
               <li><a class="dropdown-item" href="#">로그아웃</a></li>
             </ul>
           </li>
@@ -48,13 +55,12 @@
   </nav>
 </template>
 
-<script></script>
+<script setup></script>
 
 <style scoped>
-/* Add any scoped styles here if needed */
-.navbar-nav > li {
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-top: 10px;
+.img-logo,
+.img-profile {
+  width: 40px;
+  height: 40px;
 }
 </style>

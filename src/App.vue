@@ -1,10 +1,11 @@
 <script setup>
-import MainView from '@/views/MainView.vue';
+import NavBar from './components/common/NavBar.vue';
 </script>
 
 <template>
   <div>
-    <MainView />
+    <NavBar />
+    <RouterView />
   </div>
 </template>
 
