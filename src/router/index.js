@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import MainView from '@/views/main/MainView.vue';
 import MypageView from '@/views/mypage/MypageView.vue';
 import ApiDocsView from '@/views/api/ApiDocsView.vue';
+import LandingView from '@/views/landing/LandingView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -20,6 +21,11 @@ const router = createRouter({
       path: '/api-docs',
       name: 'ApiDocs',
       component: ApiDocsView,
+    },
+    {
+      path: '/landing',
+      name: 'LandingView',
+      component: LandingView,
     },
   ],
 });
