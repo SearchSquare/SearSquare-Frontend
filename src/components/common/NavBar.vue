@@ -15,12 +15,7 @@
       <div class="collapse navbar-collapse justify-content-between" id="navbarNavDropdown">
         <ul class="navbar-nav">
           <a class="navbar-brand" href="#"
-            ><img
-              style="border-radius: 20px"
-              src="/src/assets/Logo.png"
-              alt="Map"
-              class="img-fluid"
-            />서치스퀘어</a
+            ><img src="/src/assets/Logo.png" alt="Map" class="img-fluid" />서치스퀘어</a
           >
         </ul>
         <ul class="navbar-nav">
