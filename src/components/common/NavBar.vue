@@ -14,13 +14,13 @@
       </button>
       <div class="collapse navbar-collapse justify-content-between" id="navbarNavDropdown">
         <ul class="navbar-nav">
-          <a class="navbar-brand" href="#"
-            ><img src="/src/assets/Logo.png" alt="Map" class="img-fluid" />서치스퀘어</a
-          >
+          <RouterLink class="navbar-brand" to="/">
+            <img src="/src/assets/Logo.png" alt="Map" class="img-fluid" />서치스퀘어
+          </RouterLink>
         </ul>
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link" href="#">API문서</a>
+            <RouterLink class="nav-link" to="/api-docs">API문서</RouterLink>
           </li>
           <li class="nav-item dropdown">
             <a
@@ -38,8 +38,10 @@
               />
             </a>
             <ul class="dropdown-menu dropdown-menu-end">
-              <li><a class="dropdown-item" href="#">마이페이지</a></li>
-              <li><a class="dropdown-item" href="#">로그아웃</a></li>
+              <li>
+                <RouterLink class="dropdown-item" to="{name: 'mypage'}">마이페이지</RouterLink>
+              </li>
+              <li><RouterLink class="dropdown-item" to="{name: 'logout'}">로그아웃</RouterLink></li>
             </ul>
           </li>
         </ul>
@@ -48,7 +50,15 @@
   </nav>
 </template>
 
-<script></script>
+<script>
+import { RouterLink } from 'vue-router';
+
+export default {
+  components: {
+    RouterLink,
+  },
+};
+</script>
 
 <style scoped>
 /* Add any scoped styles here if needed */
