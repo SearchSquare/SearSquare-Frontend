@@ -11,32 +11,16 @@ const markerInfoList: KakaoMapMarkerListItem[] = [
 
 const markerCount = ref<number>(0);
 const markerList = computed(() => markerInfoList.slice(0, markerCount.value));
-
-const onAddMarker = () => {
-  if (markerCount.value < markerInfoList.length) {
-    markerCount.value += 1;
-  }
-};
-
-const onDeleteMarker = () => {
-  if (0 < markerCount.value) {
-    markerCount.value -= 1;
-  }
-};
 </script>
 
 <template>
   <KakaoMap
-    style="width: 50rem; height: 40rem"
+    style="width: 100%; height: 100%"
     :lat="33.450701"
     :lng="126.570667"
     :markerList="markerList"
   >
   </KakaoMap>
-  <div>
-    <button @click="onAddMarker" class="demo-button">마커 추가</button>
-    <button @click="onDeleteMarker" class="demo-button">마커 삭제</button>
-  </div>
 </template>
 
 <style scoped></style>

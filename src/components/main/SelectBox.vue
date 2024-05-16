@@ -13,7 +13,7 @@
 import { ref, onMounted } from 'vue';
 import Dropdown from './Dropdown.vue'; // Assume you have a Dropdown component
 import { getSidoNames, getGugunNames, getDongNames } from '/src/assets/map-util.js';
-
+import { RouterLink, RouterView } from 'vue-router';
 export default {
   components: {
     Dropdown,
