@@ -19,7 +19,7 @@ const handleSearch = (data) => {
       <div class="col-md-5 left-column">
         <h2>아파트를 검색해 보세요!</h2>
         <p>1248 results</p>
-        <SelectBox @searchHouse="handleSearch" />
+        <SelectBox @search-house="handleSearch" />
         <img
           v-show="searchResults.length == 0"
           src="/src/assets/main_picture.gif"
