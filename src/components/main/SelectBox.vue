@@ -10,7 +10,7 @@ const selectedSido = ref();
 const selectedGugun = ref();
 const selectedDong = ref();
 
-const emit = defineEmits(['search']);
+const emit = defineEmits(['searchHouse']);
 
 onMounted(async () => {
   const response = await getSido();
@@ -47,7 +47,7 @@ const onClickDong = (item) => {
 };
 
 const emitSearch = () => {
-  emit('search', selectedDong);
+  emit('searchHouse', selectedDong);
 };
 </script>
 

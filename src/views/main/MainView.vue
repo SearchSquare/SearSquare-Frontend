@@ -17,10 +17,10 @@ const handleSearch = (data) => {
       <div class="col-md-5 left-column">
         <h2>아파트를 검색해 보세요!</h2>
         <p>1248 results</p>
-        <SelectBox @search="handleSearch" />
-        <img v-if="!searchResults" src="/src/assets/main_picture.gif" class="responsive-image" />
-        <div v-else>
-          <h3>검색 결과: {{ searchResults.value }}</h3>
+        <SelectBox @searchHouse="handleSearch" />
+        <img v-show="!searchResults" src="/src/assets/main_picture.gif" class="responsive-image" />
+        <div v-show="searchResults">
+          <h3>검색 결과: {{ searchResults }}</h3>
           <!-- Add more details about search results as needed -->
         </div>
       </div>
