@@ -20,14 +20,13 @@ watch(selectedItem, (newValue) => {
   <div>
     <select class="form-select" v-model="selectedItem">
       <option :value="null">{{ defaultText }}</option>
-      <option v-for="item in items" :key="item" :value="item">{{ item.sido }}</option>
+      <option v-for="item in items" :key="item" :value="item">{{ item[id] }}</option>
     </select>
   </div>
 </template>
 
 <style scoped>
 .form-select {
-  margin-bottom: 1rem;
+  width: 168px;
 }
 </style>
-
