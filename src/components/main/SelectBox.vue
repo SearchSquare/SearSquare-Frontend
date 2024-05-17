@@ -43,7 +43,6 @@ const onClickGugun = async (item) => {
 
 const onClickDong = (item) => {
   selectedDong.value = item;
-  console.log(selectedDong.value);
 };
 
 const emitSearch = () => {
