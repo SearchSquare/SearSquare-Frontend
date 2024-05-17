@@ -2,7 +2,6 @@ import { createRouter, createWebHistory } from 'vue-router';
 import MainView from '@/views/main/MainView.vue';
 import MypageView from '@/views/mypage/MypageView.vue';
 import LoginView from '@/views/login/LoginView.vue';
-import LoginProgressView from '@/views/login/LoginProgressView.vue';
 import ApiDocsView from '@/views/apidocs/ApiDocsView.vue';
 
 const router = createRouter({
