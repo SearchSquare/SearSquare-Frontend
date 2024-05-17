@@ -10,6 +10,8 @@ const selectedSido = ref();
 const selectedGugun = ref();
 const selectedDong = ref();
 
+const emit = defineEmits(['searchHouse']);
+
 onMounted(async () => {
   const response = await getSido();
   if (response.data.code == 2000) {
@@ -41,6 +43,11 @@ const onClickGugun = async (item) => {
 
 const onClickDong = (item) => {
   selectedDong.value = item;
+  console.log(selectedDong.value);
+};
+
+const emitSearch = () => {
+  emit('searchHouse', selectedDong);
 };
 </script>
 
@@ -68,7 +75,7 @@ const onClickDong = (item) => {
         @click-item="onClickDong"
         defaultText="읍/면/동"
       />
-      <button type="button" id="search" class="btn btn-primary">검색</button>
+      <button type="button" id="search" class="btn btn-primary" @click="emitSearch">검색</button>
     </div>
   </div>
 </template>
