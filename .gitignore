@@ -29,4 +29,4 @@ coverage
 
 *.tsbuildinfo
 
-/src/util/config.js
+.env

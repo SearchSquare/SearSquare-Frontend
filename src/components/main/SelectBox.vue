@@ -51,21 +51,21 @@ const onClickDong = (item) => {
         class="dropdown"
         :items="sidoData"
         id="sido"
-        @clickItem="onClickSido"
+        @click-item="onClickSido"
         defaultText="시/도"
       />
       <Dropdown
         class="dropdown"
         :items="gugunData"
         id="gugun"
-        @clickItem="onClickGugun"
+        @click-item="onClickGugun"
         defaultText="구/군"
       />
       <Dropdown
         class="dropdown"
         :items="dongData"
         id="dong"
-        @clickItem="onClickDong"
+        @click-item="onClickDong"
         defaultText="읍/면/동"
       />
       <button type="button" id="search" class="btn btn-primary">검색</button>
