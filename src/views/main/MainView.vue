@@ -1,6 +1,14 @@
 <script setup>
 import Map from '@/components/common/Map.vue';
 import SelectBox from '@/components/main/SelectBox.vue';
+
+import { ref } from 'vue';
+
+const searchResults = ref(null);
+
+const handleSearch = (data) => {
+  searchResults.value = data;
+};
 </script>
 
 <template>
@@ -9,8 +17,12 @@ import SelectBox from '@/components/main/SelectBox.vue';
       <div class="col-md-5 left-column">
         <h2>아파트를 검색해 보세요!</h2>
         <p>1248 results</p>
-        <SelectBox />
-        <img src="/src/assets/main_picture.gif" class="responsive-image" />
+        <SelectBox @search="handleSearch" />
+        <img v-if="!searchResults" src="/src/assets/main_picture.gif" class="responsive-image" />
+        <div v-else>
+          <h3>검색 결과: {{ searchResults.value }}</h3>
+          <!-- Add more details about search results as needed -->
+        </div>
       </div>
       <div class="col-md-7 right-column">
         <Map />
