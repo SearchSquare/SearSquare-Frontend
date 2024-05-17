@@ -1,13 +1,15 @@
 <script setup>
 import Map from '@/components/common/Map.vue';
 import SelectBox from '@/components/main/SelectBox.vue';
+import HouseCard from '@/components/main/HouseCard.vue';
 
 import { ref } from 'vue';
 
-const searchResults = ref(null);
+const searchResults = ref([]);
 
 const handleSearch = (data) => {
   searchResults.value = data;
+  console.log(searchResults.value);
 };
 </script>
 
@@ -18,10 +20,13 @@ const handleSearch = (data) => {
         <h2>아파트를 검색해 보세요!</h2>
         <p>1248 results</p>
         <SelectBox @searchHouse="handleSearch" />
-        <img v-show="!searchResults" src="/src/assets/main_picture.gif" class="responsive-image" />
+        <img
+          v-show="searchResults.length == 0"
+          src="/src/assets/main_picture.gif"
+          class="responsive-image"
+        />
         <div v-show="searchResults">
-          <h3>검색 결과: {{ searchResults }}</h3>
-          <!-- Add more details about search results as needed -->
+          <HouseCard v-for="house in searchResults.value" :key="house" />
         </div>
       </div>
       <div class="col-md-7 right-column">
