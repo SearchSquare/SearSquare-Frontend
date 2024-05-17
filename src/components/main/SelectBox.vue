@@ -1,14 +1,14 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import { getGugun, getSido, getDong } from './api/GetRegion.js';
+import { getGugun, getSido, getDong } from '@/api/house/GetRegion.js';
 import Dropdown from '@/components/main/Dropdown.vue';
 
 const sidoData = ref([]);
 const gugunData = ref([]);
 const dongData = ref([]);
-const selectedSido = ref(null);
-const selectedGugun = ref(null);
-const selectedDong = ref(null);
+const selectedSido = ref();
+const selectedGugun = ref();
+const selectedDong = ref();
 
 onMounted(async () => {
   const response = await getSido();
