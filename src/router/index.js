@@ -27,13 +27,6 @@ const router = createRouter({
       path: '/login',
       name: 'LoginView',
       component: LoginView,
-      children: [
-        {
-          path: 'progress',
-          name: 'LoginProgressView',
-          component: LoginProgressView,
-        },
-      ],
     },
   ],
 });
