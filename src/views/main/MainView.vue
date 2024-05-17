@@ -9,7 +9,6 @@ const searchResults = ref([]);
 
 const handleSearch = (data) => {
   searchResults.value = data;
-  console.log(searchResults.value);
 };
 </script>
 
