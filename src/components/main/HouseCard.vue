@@ -9,11 +9,11 @@
       <div class="row">
         <div class="col">
           <h6>최고가</h6>
-          <p class="text-muted">{{ house.price.maxPrice }}</p>
+          <Price :price="house.price.maxPrice" />
         </div>
         <div class="col">
           <h6>최저가</h6>
-          <p class="text-muted">{{ house.price.minPrice }}</p>
+          <Price :price="house.price.minPrice" />
         </div>
       </div>
     </div>

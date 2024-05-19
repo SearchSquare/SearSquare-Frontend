@@ -66,12 +66,11 @@ const load = async ($state) => {
   margin-left: 0px;
   margin-right: 0px;
   margin-bottom: 0px;
-  height: 100vh;
+  height: calc(100vh - 120px);
 }
 
 .map {
   width: 100vw;
-  height: 100%;
 }
 
 .left-column {
@@ -91,5 +90,31 @@ const load = async ($state) => {
   max-height: 70vh; /* Adjust based on your layout */
   overflow-y: auto;
   padding-right: 10px; /* Optional: for scrollbar spacing */
+}
+
+/* Webkit 기반 브라우저 (Chrome, Safari 등) */
+.scrollable-container::-webkit-scrollbar {
+  width: 12px; /* 스크롤바의 너비 */
+}
+
+.scrollable-container::-webkit-scrollbar-thumb {
+  background-color: #888; /* 스크롤바 손잡이 색상 */
+  border-radius: 10px; /* 손잡이의 둥근 모서리 */
+  border: 3px solid transparent; /* 스크롤바 손잡이의 여백 */
+  background-clip: content-box; /* 손잡이의 배경 클립 */
+}
+
+.scrollable-container::-webkit-scrollbar-thumb:hover {
+  background-color: #555; /* 손잡이 호버 시 색상 */
+}
+
+.scrollable-container::-webkit-scrollbar-track {
+  background-color: #f1f1f1; /* 스크롤바 트랙 색상 */
+  border-radius: 10px; /* 트랙의 둥근 모서리 */
+  margin: 10px 0; /* 트랙의 위, 아래 여백 */
+}
+
+.scrollable-container::-webkit-scrollbar-corner {
+  background-color: transparent; /* 스크롤바 코너의 색상 */
 }
 </style>
