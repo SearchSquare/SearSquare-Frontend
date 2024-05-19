@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { defineProps, ref, computed, watch, defineExpose } from 'vue';
-import { KakaoMap, KakaoMapMarker, type KakaoMapMarkerListItem } from 'vue3-kakao-maps';
+import {
+  KakaoMap,
+  KakaoMapMarker,
+  type KakaoMapMarkerListItem,
+} from 'vue3-kakao-maps';
 
 const props = defineProps<{
   aptList: Array<{
@@ -38,7 +42,11 @@ defineExpose({ updateMapCenter });
 </script>
 
 <template>
-  <KakaoMap style="width: 100%; height: 800px" :lat="mapCenter.lat" :lng="mapCenter.lng">
+  <KakaoMap
+    style="width: 100vh; height: calc(100vh - 66px)"
+    :lat="mapCenter.lat"
+    :lng="mapCenter.lng"
+  >
     <KakaoMapMarker
       v-for="marker in markerInfoList"
       :key="marker.id"
