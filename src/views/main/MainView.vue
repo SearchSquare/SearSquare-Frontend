@@ -10,6 +10,7 @@ import { ref } from 'vue';
 const aptList = ref([]); // 전체 검색 결과 저장
 const dongCode = ref(null);
 let lastAptId = null;
+const mapRef = ref(null);
 
 const handleSearch = (data) => {
   aptList.value = data.response.response;
@@ -34,6 +35,10 @@ const load = async ($state) => {
     $state.error();
   }
 };
+
+const handleHouseCardClick = (lat, lng) => {
+  mapRef.value.updateMapCenter(lat, lng);
+};
 </script>
 
 <template>
@@ -49,12 +54,17 @@ const load = async ($state) => {
           class="responsive-image"
         />
         <div v-show="aptList.length" class="scrollable-container">
-          <HouseCard v-for="house in aptList" :key="house.aptId" :house="house" />
+          <HouseCard
+            v-for="house in aptList"
+            :key="house.aptId"
+            :house="house"
+            @click="handleHouseCardClick(house.lat, house.lng)"
+          />
           <InfiniteLoading @infinite="load" />
         </div>
       </div>
       <div class="col-md-7 right-column">
-        <Map />
+        <Map ref="mapRef" :aptList="aptList" />
       </div>
     </div>
   </div>

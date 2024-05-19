@@ -1,5 +1,5 @@
 <template>
-  <div class="house-card card mb-3">
+  <div class="house-card card mb-3" @click="handleClick">
     <div class="card-body">
       <h5 class="card-title">{{ props.house.name }}</h5>
       <p class="card-text">
@@ -26,6 +26,12 @@ import Price from '@/components/common/Price.vue';
 const props = defineProps({
   house: Object,
 });
+
+const emit = defineEmits(['click']);
+
+const handleClick = () => {
+  emit('click', props.house.lat, props.house.lng);
+};
 </script>
 
 <style scoped>
