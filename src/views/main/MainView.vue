@@ -2,13 +2,39 @@
 import Map from '@/components/common/Map.vue';
 import SelectBox from '@/components/main/SelectBox.vue';
 import HouseCard from '@/components/main/HouseCard.vue';
+import InfiniteLoading from 'v3-infinite-loading';
+import 'v3-infinite-loading/lib/style.css';
 
 import { ref } from 'vue';
 
-const searchResults = ref([]);
+const searchResults = ref([]); // 전체 검색 결과 저장
+const dongCode = ref(null);
+let lastAptId = null;
 
 const handleSearch = (data) => {
-  searchResults.value = data;
+  searchResults.value = data.response.response;
+  dongCode.value = data.dongCode;
+  lastAptId = searchResults.value.length
+    ? searchResults.value[searchResults.value.length - 1].aptId
+    : 0;
+};
+
+const load = async ($state) => {
+  try {
+    const response = await fetch(
+      `http://localhost:8080/house/?dong-code=${dongCode.value}&size=10&last-house-id=${lastAptId}`
+    );
+    const json = await response.json();
+    const newResults = json;
+    if (json.response.length < 10) $state.complete();
+    else {
+      searchResults.value.push(...json.response);
+      $state.loaded();
+    }
+    lastAptId = newResults.response[newResults.response.length - 1].aptId;
+  } catch (error) {
+    $state.error();
+  }
 };
 </script>
 
@@ -24,8 +50,9 @@ const handleSearch = (data) => {
           src="/src/assets/main_picture.gif"
           class="responsive-image"
         />
-        <div v-show="searchResults">
-          <HouseCard v-for="house in searchResults.value" :key="house" />
+        <div v-show="searchResults.length" class="scrollable-container">
+          <HouseCard v-for="house in searchResults" :key="house.aptId" :house="house" />
+          <InfiniteLoading @infinite="load" />
         </div>
       </div>
       <div class="col-md-7 right-column">
@@ -60,5 +87,11 @@ const handleSearch = (data) => {
 .responsive-image {
   max-width: 80%;
   height: auto;
+}
+
+.scrollable-container {
+  max-height: 70vh; /* Adjust based on your layout */
+  overflow-y: auto;
+  padding-right: 10px; /* Optional: for scrollbar spacing */
 }
 </style>

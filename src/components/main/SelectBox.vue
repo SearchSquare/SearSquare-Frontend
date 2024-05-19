@@ -45,8 +45,14 @@ const onClickDong = (item) => {
   selectedDong.value = item;
 };
 
-const emitSearch = () => {
-  emit('searchHouse', selectedDong);
+const emitSearch = async () => {
+  const response = await fetch(
+    `http://localhost:8080/house/?dong-code=${selectedDong.value.dongCode}&size=10`
+  );
+  const json = await response.json();
+
+  // 데이터를 요청
+  emit('searchHouse', { response: json, dongCode: selectedDong.value.dongCode });
 };
 </script>
 

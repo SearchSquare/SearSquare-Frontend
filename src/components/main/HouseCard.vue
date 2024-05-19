@@ -1,18 +1,19 @@
 <template>
-  <div class="card house-card">
+  <div class="house-card card mb-3">
     <div class="card-body">
+      <h5 class="card-title">{{ props.house.name }}</h5>
+      <p class="card-text">
+        {{ house.address.sido }} {{ house.address.gugun }} {{ house.address.dong }}
+        {{ house.jibun }}
+      </p>
       <div class="row">
-        <div class="col-md-6">
-          <h5 class="card-title">자이아파트</h5>
-          <p class="card-text">서울시 강남구</p>
-        </div>
-        <div class="col-md-3 text-center">
+        <div class="col">
           <h6>최고가</h6>
-          <Price />
+          <p class="text-muted">{{ house.price.maxPrice }}</p>
         </div>
-        <div class="col-md-3 text-center">
+        <div class="col">
           <h6>최저가</h6>
-          <Price />
+          <p class="text-muted">{{ house.price.minPrice }}</p>
         </div>
       </div>
     </div>
@@ -22,7 +23,7 @@
 <script setup>
 import Price from '@/components/common/Price.vue';
 
-defineProps({
+const props = defineProps({
   house: Object,
 });
 </script>
