@@ -7,16 +7,14 @@ import 'v3-infinite-loading/lib/style.css';
 
 import { ref } from 'vue';
 
-const searchResults = ref([]); // 전체 검색 결과 저장
+const aptList = ref([]); // 전체 검색 결과 저장
 const dongCode = ref(null);
 let lastAptId = null;
 
 const handleSearch = (data) => {
-  searchResults.value = data.response.response;
+  aptList.value = data.response.response;
   dongCode.value = data.dongCode;
-  lastAptId = searchResults.value.length
-    ? searchResults.value[searchResults.value.length - 1].aptId
-    : 0;
+  lastAptId = aptList.value.length ? aptList.value[aptList.value.length - 1].aptId : 0;
 };
 
 const load = async ($state) => {
@@ -28,7 +26,7 @@ const load = async ($state) => {
     const newResults = json;
     if (json.response.length < 10) $state.complete();
     else {
-      searchResults.value.push(...json.response);
+      aptList.value.push(...json.response);
       $state.loaded();
     }
     lastAptId = newResults.response[newResults.response.length - 1].aptId;
@@ -46,12 +44,12 @@ const load = async ($state) => {
         <p>1248 results</p>
         <SelectBox @search-house="handleSearch" />
         <img
-          v-show="searchResults.length == 0"
+          v-show="aptList.length == 0"
           src="/src/assets/main_picture.gif"
           class="responsive-image"
         />
-        <div v-show="searchResults.length" class="scrollable-container">
-          <HouseCard v-for="house in searchResults" :key="house.aptId" :house="house" />
+        <div v-show="aptList.length" class="scrollable-container">
+          <HouseCard v-for="house in aptList" :key="house.aptId" :house="house" />
           <InfiniteLoading @infinite="load" />
         </div>
       </div>
