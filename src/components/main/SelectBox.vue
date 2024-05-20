@@ -43,48 +43,54 @@ const onClickGugun = async (item) => {
 
 const onClickDong = (item) => {
   selectedDong.value = item;
+  console.log(selectedDong.value);
 };
 
-const emitSearch = () => {
-  emit('searchHouse', selectedDong);
+const emitSearch = async () => {
+  const response = await fetch(
+    `http://localhost:8080/house/?dong-code=${selectedDong.value.dongCode}&size=10`
+  );
+  const json = await response.json();
+
+  // 데이터를 요청
+  emit('searchHouse', {
+    response: json,
+    dongCode: selectedDong.value.dongCode,
+  });
 };
 </script>
 
 <template>
-  <div>
-    <div class="input-group mb-3">
-      <Dropdown
-        class="dropdown"
-        :items="sidoData"
-        id="sido"
-        @click-item="onClickSido"
-        defaultText="시/도"
-      />
-      <Dropdown
-        class="dropdown"
-        :items="gugunData"
-        id="gugun"
-        @click-item="onClickGugun"
-        defaultText="구/군"
-      />
-      <Dropdown
-        class="dropdown"
-        :items="dongData"
-        id="dong"
-        @click-item="onClickDong"
-        defaultText="읍/면/동"
-      />
-      <button type="button" id="search" class="btn btn-primary" @click="emitSearch">검색</button>
-    </div>
+  <div class="d-flex justify-content-start">
+    <Dropdown
+      class="dropdown"
+      :items="sidoData"
+      id="sido"
+      @click-item="onClickSido"
+      defaultText="시/도"
+    />
+    <Dropdown
+      class="dropdown"
+      :items="gugunData"
+      id="gugun"
+      @click-item="onClickGugun"
+      defaultText="구/군"
+    />
+    <Dropdown
+      class="dropdown"
+      :items="dongData"
+      id="dong"
+      @click-item="onClickDong"
+      defaultText="읍/면/동"
+    />
+    <button type="button" class="btn btn-primary" @click="emitSearch">
+      검색
+    </button>
   </div>
 </template>
 
 <style scoped>
 .dropdown {
   margin-right: 10px;
-}
-
-#search {
-  height: 38px;
 }
 </style>
