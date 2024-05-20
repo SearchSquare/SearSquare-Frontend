@@ -43,7 +43,7 @@ defineExpose({ updateMapCenter });
 
 <template>
   <KakaoMap
-    style="width: 100vh; height: calc(100vh - 66px)"
+    style="width: calc(100vw -764px); height: calc(100vh - 66px)"
     :lat="mapCenter.lat"
     :lng="mapCenter.lng"
   >

@@ -61,7 +61,7 @@ const emitSearch = async () => {
 </script>
 
 <template>
-  <div class="d-flex justify-content-evenly">
+  <div class="d-flex justify-content-start">
     <Dropdown
       class="dropdown"
       :items="sidoData"

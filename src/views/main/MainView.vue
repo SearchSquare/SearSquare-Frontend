@@ -21,21 +21,16 @@ const handleSearch = (data) => {
 
 const load = async ($state) => {
   try {
-    // api js로 재작성 필요
-    // selectBox 내부에서 호출하는 api와 별도로 작성되어 있는게 좋아보이지 않음
-    // emit으로 동 코드와 최초 호출 flag 변수를 전달받아서 MainView에서 조건에 맞게 적절한 api를 호출하는게 맞다고 생각함
     const response = await fetch(
       `http://localhost:8080/house/?dong-code=${dongCode.value}&size=10&last-house-id=${lastAptId.value}`
     );
     const json = await response.json();
     console.log(json);
     const newResults = json;
-    // 더이상 결과가 없을 때 complete으로 상태를 변경해야 끝
-    // 무제한으로 요청보내는 에러 있음
-    if (!json.response) {
+    aptList.value.push(...json.response);
+    if (json.response.length < 10) {
       $state.complete();
     } else {
-      aptList.value.push(...json.response);
       $state.loaded();
     }
     lastAptId.value = newResults.response[newResults.response.length - 1].aptId;
@@ -55,7 +50,6 @@ const handleHouseCardClick = (lat, lng) => {
       <div class="col-5 left-column">
         <div>
           <h2>아파트를 검색해 보세요!</h2>
-          <p>1248 results</p>
         </div>
         <SelectBox @search-house="handleSearch" />
         <img
@@ -106,9 +100,7 @@ const handleHouseCardClick = (lat, lng) => {
 }
 
 .scrollable-container {
-  background-color: skyblue;
-  /* height: calc(100vh - 142.4px); */
-  height: 100vh;
+  height: calc(100vh - 156.39px);
   overflow-y: auto;
   padding-right: 10px; /* Optional: for scrollbar spacing */
 }
