@@ -1,9 +1,14 @@
 <script setup>
-import { onMounted } from 'vue';
-import { oauthNaver } from '@/api/member/login.js';
+import { ref, onMounted } from 'vue';
+import { storeToRefs } from 'pinia';
 import { useRouter } from 'vue-router';
+import { useMemberStore } from '@/stores/member.js';
 
+const naverToken = ref('');
 const router = useRouter();
+const memberStore = useMemberStore();
+
+const { loginWithNaverStore } = memberStore;
 
 onMounted(() => {
   const NAVER_CLIENT_ID = import.meta.env.VITE_NAVER_CLIENT_ID;
@@ -20,22 +25,13 @@ onMounted(() => {
 
   naverLogin.getLoginStatus((status) => {
     if (status) {
-      const accessToken = naverLogin.accessToken.accessToken;
-      console.log(accessToken);
-      login(accessToken);
+      loginWithNaver(naverLogin.accessToken.accessToken);
     }
   });
 });
 
-const login = async (accessToken) => {
-  const response = await oauthNaver(accessToken);
-  console.log(accessToken);
-  if (response.data.code == 2000) {
-    console.log(response.data.result);
-    router.replace({ name: 'Main' });
-  } else {
-    console.error('로그인 에러:', response.data.message);
-  }
+const loginWithNaver = async (naverToken) => {
+  await loginWithNaverStore(naverToken);
 };
 </script>
 
