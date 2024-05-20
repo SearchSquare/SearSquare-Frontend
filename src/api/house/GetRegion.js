@@ -17,4 +17,16 @@ function getDong(dongCode) {
   return response;
 }
 
-export { getSido, getGugun, getDong };
+function getFirstAptInfo(dongCode) {
+  const response = local.get(`/house/`, { params: { 'dong-code': dongCode, size: 10 } });
+  return response;
+}
+
+function getReloadAptInfo(dongCode, lastAptId) {
+  const response = local.get(`/house/`, {
+    params: { 'dong-code': dongCode, size: 10, 'last-house-id': lastAptId },
+  });
+  return response;
+}
+
+export { getSido, getGugun, getDong, getFirstAptInfo, getReloadAptInfo };
