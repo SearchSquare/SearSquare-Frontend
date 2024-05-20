@@ -1,13 +1,14 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import { storeToRefs } from 'pinia';
 import { useRouter } from 'vue-router';
 import { useMemberStore } from '@/stores/member.js';
+import { storeToRefs } from 'pinia';
 
 const naverToken = ref('');
 const router = useRouter();
-const memberStore = useMemberStore();
 
+const memberStore = useMemberStore();
+const { isLogin } = storeToRefs(memberStore);
 const { loginWithNaverStore } = memberStore;
 
 onMounted(() => {
@@ -24,8 +25,10 @@ onMounted(() => {
   naverLogin.init();
 
   naverLogin.getLoginStatus((status) => {
-    if (status) {
-      loginWithNaver(naverLogin.accessToken.accessToken);
+    if (!isLogin.value) {
+      if (status) {
+        loginWithNaver(naverLogin.accessToken.accessToken);
+      }
     }
   });
 });

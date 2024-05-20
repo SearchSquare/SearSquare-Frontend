@@ -3,8 +3,8 @@ import MainView from '@/views/main/MainView.vue';
 import MypageView from '@/views/mypage/MypageView.vue';
 import LoginView from '@/views/login/LoginView.vue';
 import ApiDocsView from '@/views/apidocs/ApiDocsView.vue';
-import { useMemberStore } from '@/stores/member.js';
 import { storeToRefs } from 'pinia';
+import { useMemberStore } from '@/stores/member.js';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -26,24 +26,17 @@ const router = createRouter({
     },
     {
       path: '/login',
-      name: 'LoginView',
+      name: 'Login',
       component: LoginView,
     },
   ],
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, from) => {
   const memberStore = useMemberStore();
   const { isLogin } = storeToRefs(memberStore);
-  // console.log(isLogin.value);
-  console.log('to경로', to.path);
-  console.log("to.path == '/login'", to.path == '/login');
-  console.log('isLogin: ', isLogin.value);
-  if (to.path == '/login' && isLogin.value) {
-    console.log('이동 중 가드 만남');
-    next({ name: 'Main' });
-  } else {
-    next();
+  if (to.name === 'Login' && isLogin.value) {
+    return { name: 'Main' };
   }
 });
 
