@@ -43,6 +43,11 @@ let roadview;
 let roadviewClient;
 let marker;
 
+// 사용자 정의 마커 이미지
+const markerImageUrl = '/src/assets/marker.png'; // 마커 이미지 URL
+const markerImageSize = new kakao.maps.Size(48, 48); // 마커 이미지 크기
+const markerImageOption = { offset: new kakao.maps.Point(24, 48) }; // 마커 이미지 옵션(기준점)
+
 // 카카오맵을 초기화하는 함수
 const initializeMap = () => {
   const position = new kakao.maps.LatLng(props.lat, props.lng);
@@ -53,9 +58,16 @@ const initializeMap = () => {
 
   map = new kakao.maps.Map(mapContainer.value, mapOptions);
 
+  const markerImage = new kakao.maps.MarkerImage(
+    markerImageUrl,
+    markerImageSize,
+    markerImageOption
+  );
+
   marker = new kakao.maps.Marker({
     position,
     map,
+    image: markerImage, // 사용자 정의 마커 이미지를 설정합니다
   });
 
   roadview = new kakao.maps.Roadview(roadviewContainer.value);
