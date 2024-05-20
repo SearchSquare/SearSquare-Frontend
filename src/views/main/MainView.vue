@@ -1,8 +1,9 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, nextTick } from 'vue';
 import Map from '@/components/common/Map.vue';
 import SelectBox from '@/components/main/SelectBox.vue';
 import HouseCard from '@/components/main/HouseCard.vue';
+import { getFirstAptInfo, getReloadAptInfo } from '@/api/house/GetRegion';
 import InfiniteLoading from 'v3-infinite-loading';
 import 'v3-infinite-loading/lib/style.css';
 
@@ -10,32 +11,42 @@ const aptList = ref([]); // 전체 검색 결과 저장
 const dongCode = ref('');
 const lastAptId = ref(null);
 const mapRef = ref(null);
+const infiniteLoadingKey = ref(Date.now());
 
-const handleSearch = (data) => {
-  aptList.value = data.response.response;
-  dongCode.value = data.dongCode;
-  if (aptList.value.length > 0) {
-    lastAptId.value = aptList.value[aptList.value.length - 1].aptId;
+const handleSearch = async (data) => {
+  dongCode.value = data;
+
+  infiniteLoadingKey.value = Date.now();
+
+  try {
+    const response = await getFirstAptInfo(dongCode.value);
+    aptList.value = response.data.response; // 데이터를 aptList에 할당
+    if (aptList.value.length > 0) {
+      lastAptId.value = aptList.value[aptList.value.length - 1].aptId;
+      console.log(lastAptId.value);
+    }
+  } catch (error) {
+    console.error('Failed to fetch apartment information:', error);
   }
 };
 
 const load = async ($state) => {
   try {
-    const response = await fetch(
-      `http://localhost:8080/house/?dong-code=${dongCode.value}&size=10&last-house-id=${lastAptId.value}`
-    );
-    const json = await response.json();
-    console.log(json);
-    const newResults = json;
-    aptList.value.push(...json.response);
-    if (json.response.length < 10) {
-      $state.complete();
+    const response = await getReloadAptInfo(dongCode.value, lastAptId.value);
+    const newResults = response.data.response;
+    console.log('마지막 id ', newResults[newResults.length - 1].aptId);
+    console.log('목록 ', aptList.value);
+    if (newResults.length) {
+      aptList.value.push(...newResults);
+      lastAptId.value = newResults[newResults.length - 1].aptId;
+      newResults.length < 10 ? $state.complete() : $state.loaded();
     } else {
-      $state.loaded();
+      $state.complete();
     }
-    lastAptId.value = newResults.response[newResults.response.length - 1].aptId;
+    console.log('최종 id ', lastAptId.value);
   } catch (error) {
-    $state.error();
+    // $state.error();
+    $state.complete();
   }
 };
 
@@ -64,7 +75,7 @@ const handleHouseCardClick = (lat, lng) => {
             :house="house"
             @click="handleHouseCardClick(house.lat, house.lng)"
           />
-          <InfiniteLoading @infinite="load" />
+          <InfiniteLoading :identifier="infiniteLoadingKey" @infinite="load" />
         </div>
       </div>
       <div class="col-7 right-column">

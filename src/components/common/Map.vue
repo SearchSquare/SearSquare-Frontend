@@ -1,15 +1,11 @@
 <script setup lang="ts">
 import { defineProps, ref, computed, watch, defineExpose } from 'vue';
-import {
-  KakaoMap,
-  KakaoMapMarker,
-  type KakaoMapMarkerListItem,
-} from 'vue3-kakao-maps';
+import { KakaoMap, KakaoMapMarker, type KakaoMapMarkerListItem } from 'vue3-kakao-maps';
 
 const props = defineProps<{
   aptList: Array<{
     aptId: number;
-    name: String;
+    name: string;
     lat: number;
     lng: number;
   }>;
@@ -21,6 +17,7 @@ const markerInfoList = computed<KakaoMapMarkerListItem[]>(() =>
     lat: apt.lat,
     lng: apt.lng,
     name: apt.name,
+    visible: ref(false), // Add visibility state for each marker
   }))
 );
 
@@ -39,6 +36,15 @@ const updateMapCenter = (lat: number, lng: number) => {
 
 // Expose updateMapCenter to be accessible from the parent component
 defineExpose({ updateMapCenter });
+
+// Event handlers for marker infoWindow
+const mouseOverKakaoMapMarker = (marker: KakaoMapMarkerListItem) => {
+  marker.visible.value = true;
+};
+
+const mouseOutKakaoMapMarker = (marker: KakaoMapMarkerListItem) => {
+  marker.visible.value = false;
+};
 </script>
 
 <template>
@@ -52,6 +58,16 @@ defineExpose({ updateMapCenter });
       :key="marker.id"
       :lat="marker.lat"
       :lng="marker.lng"
+      :clickable="true"
+      :infoWindow="{ content: marker.name, visible: marker.visible.value }"
+      @mouseOverKakaoMapMarker="() => mouseOverKakaoMapMarker(marker)"
+      @mouseOutKakaoMapMarker="() => mouseOutKakaoMapMarker(marker)"
+      :image="{
+        imageSrc: '/src/assets/marker.png',
+        imageWidth: 48,
+        imageHeight: 48,
+        imageOption: {},
+      }"
     />
   </KakaoMap>
 </template>
