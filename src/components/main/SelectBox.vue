@@ -47,16 +47,8 @@ const onClickDong = (item) => {
 };
 
 const emitSearch = async () => {
-  const response = await fetch(
-    `http://localhost:8080/house/?dong-code=${selectedDong.value.dongCode}&size=10`
-  );
-  const json = await response.json();
-
   // 데이터를 요청
-  emit('searchHouse', {
-    response: json,
-    dongCode: selectedDong.value.dongCode,
-  });
+  emit('searchHouse', selectedDong.value.dongCode);
 };
 </script>
 
@@ -83,9 +75,7 @@ const emitSearch = async () => {
       @click-item="onClickDong"
       defaultText="읍/면/동"
     />
-    <button type="button" class="btn btn-primary" @click="emitSearch">
-      검색
-    </button>
+    <button type="button" class="btn btn-primary" @click="emitSearch">검색</button>
   </div>
 </template>
 
