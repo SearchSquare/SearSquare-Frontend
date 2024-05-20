@@ -90,7 +90,7 @@ const handleHouseCardClick = (house) => {
       </div>
       <div class="col-8 right-column">
         <HouseDetail :house="selectedHouse" :show="isHouseDetailVisible" />
-        <Map ref="mapRef" :aptList="aptList" />
+        <Map ref="mapRef" :aptList="aptList" :selectedHouse="selectedHouse" />
       </div>
     </div>
   </div>

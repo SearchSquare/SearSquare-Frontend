@@ -20,14 +20,16 @@
       <p>Built Year: {{ house.builtYear }}</p>
       <Price :price="house.price.maxPrice" label="최고가" />
       <Price :price="house.price.minPrice" label="최저가" />
+      <RoadMap :lat="house.lat" :lng="house.lng" />
     </div>
   </div>
 </template>
 
 <script setup>
-import { defineProps, ref, watch, onMounted } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import Price from '@/components/common/Price.vue';
 import { Offcanvas } from 'bootstrap';
+import RoadMap from '@/components/common/RoadMap.vue';
 
 const props = defineProps({
   house: {
