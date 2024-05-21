@@ -6,6 +6,8 @@ import ApiDocsView from '@/views/apidocs/ApiDocsView.vue';
 import { storeToRefs } from 'pinia';
 import { useMemberStore } from '@/stores/member.js';
 import AdminView from '@/views/admin/AdminView.vue';
+import ServiceStatistics from '@/components/admin/ServiceStatistics.vue';
+import MemberManagement from '@/components/admin/MemberManagement.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -34,6 +36,18 @@ const router = createRouter({
       path: '/admin',
       name: 'admin',
       component: AdminView,
+      children: [
+        {
+          path: 'servicestatistics',
+          name: 'ServiceStatistics',
+          component: ServiceStatistics,
+        },
+        {
+          path: 'membermanagement',
+          name: 'MemberManagement',
+          component: MemberManagement,
+        },
+      ],
     },
   ],
 });
