@@ -8,8 +8,6 @@ import { getFirstAptInfo, getReloadAptInfo } from '@/api/house/GetRegion';
 import { getFirstHouseDeal, getSecondHouseDeal } from '@/api/house/GetHouse';
 import InfiniteLoading from 'v3-infinite-loading';
 import 'v3-infinite-loading/lib/style.css';
-import 'bootstrap/dist/css/bootstrap.min.css'; // Bootstrap CSS import
-import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // Bootstrap JavaScript import
 
 const aptList = ref([]); // 전체 검색 결과 저장
 const dongCode = ref('');
@@ -19,7 +17,6 @@ const infiniteLoadingKey = ref(Date.now());
 const selectedHouse = ref(null);
 const isHouseDetailVisible = ref(false);
 const firstHouseDeal = ref([]);
-let lastHouseDealId = ref(null);
 
 const handleSearch = async (data) => {
   dongCode.value = data;
