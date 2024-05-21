@@ -5,6 +5,7 @@ import LoginView from '@/views/login/LoginView.vue';
 import ApiDocsView from '@/views/apidocs/ApiDocsView.vue';
 import { storeToRefs } from 'pinia';
 import { useMemberStore } from '@/stores/member.js';
+import AdminView from '@/views/admin/AdminView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -28,6 +29,11 @@ const router = createRouter({
       path: '/login',
       name: 'Login',
       component: LoginView,
+    },
+    {
+      path: '/admin',
+      name: 'admin',
+      component: AdminView,
     },
   ],
 });
