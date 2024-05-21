@@ -8,11 +8,9 @@ const formatPrice = (price) => {
   const billion = Math.floor(price / 10000); // 백만 원 단위로 넘어오는 값을 10000으로 나누어 억 단위를 구합니다.
   const million = Math.floor((price % 10000) / 1000); // 나머지 값을 1000으로 나누어 천만 원 단위를 구합니다.
   if (price === 0) {
-    return '가격 정보가 없습니다.';
+    return '거래없음';
   }
-  return `${billion ? `${billion}억` : ''} ${
-    million ? `${million}천만원` : '원'
-  }`;
+  return `${billion ? `${billion}억` : ''} ${million ? `${million}천만원` : '원'}`;
 };
 </script>
 

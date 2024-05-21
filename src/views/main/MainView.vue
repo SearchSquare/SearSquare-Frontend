@@ -5,6 +5,7 @@ import SelectBox from '@/components/main/SelectBox.vue';
 import HouseCard from '@/components/main/HouseCard.vue';
 import HouseDetail from '@/components/main/HouseDetail.vue';
 import { getFirstAptInfo, getReloadAptInfo } from '@/api/house/GetRegion';
+import { getFirstHouseDeal, getSecondHouseDeal } from '@/api/house/GetHouse';
 import InfiniteLoading from 'v3-infinite-loading';
 import 'v3-infinite-loading/lib/style.css';
 import 'bootstrap/dist/css/bootstrap.min.css'; // Bootstrap CSS import
@@ -17,6 +18,8 @@ const mapRef = ref(null);
 const infiniteLoadingKey = ref(Date.now());
 const selectedHouse = ref(null);
 const isHouseDetailVisible = ref(false);
+const firstHouseDeal = ref([]);
+let lastHouseDealId = ref(null);
 
 const handleSearch = async (data) => {
   dongCode.value = data;
@@ -55,13 +58,19 @@ const load = async ($state) => {
   }
 };
 
-const handleHouseCardClick = (house) => {
+const handleHouseCardClick = async (house) => {
   selectedHouse.value = house;
   isHouseDetailVisible.value = false; // Offcanvas 초기화
   nextTick(() => {
     isHouseDetailVisible.value = true; // Offcanvas 표시
   });
   mapRef.value.updateMapCenter(house.lat, house.lng);
+  try {
+    const response = await getFirstHouseDeal(selectedHouse.value.aptId);
+    firstHouseDeal.value = response.data.response;
+  } catch (error) {
+    console.error('Failed to fetch apartment information:', error);
+  }
 };
 </script>
 
@@ -89,7 +98,11 @@ const handleHouseCardClick = (house) => {
         </div>
       </div>
       <div class="col-8 right-column">
-        <HouseDetail :house="selectedHouse" :show="isHouseDetailVisible" />
+        <HouseDetail
+          :house="selectedHouse"
+          :housedeal="firstHouseDeal"
+          :show="isHouseDetailVisible"
+        />
         <Map ref="mapRef" :aptList="aptList" :selectedHouse="selectedHouse" />
       </div>
     </div>
