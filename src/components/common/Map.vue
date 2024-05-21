@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
-import { KakaoMap, KakaoMapMarker, type KakaoMapMarkerListItem } from 'vue3-kakao-maps';
+import {
+  KakaoMap,
+  KakaoMapMarker,
+  type KakaoMapMarkerListItem,
+} from 'vue3-kakao-maps';
 
 const props = defineProps<{
   aptList: Array<{

@@ -8,17 +8,23 @@ function getSido() {
 }
 
 function getGugun(dongCode) {
-  const response = local.get(`/house/address/gugun`, { params: { 'dong-code': dongCode } });
+  const response = local.get(`/house/address/gugun`, {
+    params: { 'dong-code': dongCode },
+  });
   return response;
 }
 
 function getDong(dongCode) {
-  const response = local.get(`/house/address/dong`, { params: { 'dong-code': dongCode } });
+  const response = local.get(`/house/address/dong`, {
+    params: { 'dong-code': dongCode },
+  });
   return response;
 }
 
 function getFirstAptInfo(dongCode) {
-  const response = local.get(`/house/`, { params: { 'dong-code': dongCode, size: 10 } });
+  const response = local.get(`/house/`, {
+    params: { 'dong-code': dongCode, size: 10 },
+  });
   return response;
 }
 
