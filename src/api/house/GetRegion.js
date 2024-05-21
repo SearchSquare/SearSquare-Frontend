@@ -22,7 +22,9 @@ function getDong(dongCode) {
 }
 
 function getFirstAptInfo(dongCode) {
-  const response = local.get(`/house/`, { params: { 'dong-code': dongCode, size: 10 } });
+  const response = local.get(`/house/`, {
+    params: { 'dong-code': dongCode, size: 10 },
+  });
   return response;
 }
 

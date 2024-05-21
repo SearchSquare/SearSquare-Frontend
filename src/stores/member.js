@@ -24,7 +24,7 @@ export const useMemberStore = defineStore('memberStore', () => {
       (error) => {
         console.log('[store] 로그인 실패');
         console.log(error);
-        sessionStorage.removeItem('accessToken');
+        sessionStorage.setItem('accessToken', null);
         sessionStorage.setItem('isLogin', 'false');
         isLogin.value = false;
         router.replace({ name: 'Login' });
