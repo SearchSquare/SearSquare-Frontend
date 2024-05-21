@@ -3,15 +3,20 @@ import { ref, nextTick } from 'vue';
 import Map from '@/components/common/Map.vue';
 import SelectBox from '@/components/main/SelectBox.vue';
 import HouseCard from '@/components/main/HouseCard.vue';
+import HouseDetail from '@/components/main/HouseDetail.vue';
 import { getFirstAptInfo, getReloadAptInfo } from '@/api/house/GetRegion';
 import InfiniteLoading from 'v3-infinite-loading';
 import 'v3-infinite-loading/lib/style.css';
+import 'bootstrap/dist/css/bootstrap.min.css'; // Bootstrap CSS import
+import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // Bootstrap JavaScript import
 
 const aptList = ref([]); // 전체 검색 결과 저장
 const dongCode = ref('');
 const lastAptId = ref(null);
 const mapRef = ref(null);
 const infiniteLoadingKey = ref(Date.now());
+const selectedHouse = ref(null);
+const isHouseDetailVisible = ref(false);
 
 const handleSearch = async (data) => {
   dongCode.value = data;
@@ -50,15 +55,20 @@ const load = async ($state) => {
   }
 };
 
-const handleHouseCardClick = (lat, lng) => {
-  mapRef.value.updateMapCenter(lat, lng);
+const handleHouseCardClick = (house) => {
+  selectedHouse.value = house;
+  isHouseDetailVisible.value = false; // Offcanvas 초기화
+  nextTick(() => {
+    isHouseDetailVisible.value = true; // Offcanvas 표시
+  });
+  mapRef.value.updateMapCenter(house.lat, house.lng);
 };
 </script>
 
 <template>
   <div class="container">
     <div class="row map">
-      <div class="col-5 left-column">
+      <div class="col-4 left-column">
         <div>
           <h2>아파트를 검색해 보세요!</h2>
         </div>
@@ -73,13 +83,14 @@ const handleHouseCardClick = (lat, lng) => {
             v-for="house in aptList"
             :key="house.aptId"
             :house="house"
-            @click="handleHouseCardClick(house.lat, house.lng)"
+            @click="handleHouseCardClick(house)"
           />
           <InfiniteLoading :identifier="infiniteLoadingKey" @infinite="load" />
         </div>
       </div>
-      <div class="col-7 right-column">
-        <Map ref="mapRef" :aptList="aptList" />
+      <div class="col-8 right-column">
+        <HouseDetail :house="selectedHouse" :show="isHouseDetailVisible" />
+        <Map ref="mapRef" :aptList="aptList" :selectedHouse="selectedHouse" />
       </div>
     </div>
   </div>
@@ -99,10 +110,14 @@ const handleHouseCardClick = (lat, lng) => {
 
 .left-column {
   text-align: left; /* 왼쪽 정렬 */
+  z-index: 10;
+  background-color: white;
+  transition: transform 0.5s ease-in-out;
 }
 
 .right-column {
   text-align: right; /* 오른쪽 정렬 */
+  position: relative;
 }
 
 .responsive-image {

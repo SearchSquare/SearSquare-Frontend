@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineProps, ref, computed, watch, defineExpose } from 'vue';
+import { ref, computed, watch } from 'vue';
 import {
   KakaoMap,
   KakaoMapMarker,
@@ -13,6 +13,12 @@ const props = defineProps<{
     lat: number;
     lng: number;
   }>;
+  selectedHouse: {
+    aptId: number;
+    name: string;
+    lat: number;
+    lng: number;
+  } | null;
 }>();
 
 const markerInfoList = computed<KakaoMapMarkerListItem[]>(() =>
@@ -28,8 +34,18 @@ const markerInfoList = computed<KakaoMapMarkerListItem[]>(() =>
 // State for map center
 const mapCenter = ref({ lat: 37.5665, lng: 126.978 }); // Default coordinates (e.g., Seoul, South Korea)
 
+watch(
+  () => props.selectedHouse,
+  (newHouse) => {
+    if (newHouse) {
+      mapCenter.value = { lat: newHouse.lat, lng: newHouse.lng };
+    }
+  },
+  { immediate: true }
+);
+
 watch(markerInfoList, (newList) => {
-  if (newList.length > 0) {
+  if (newList.length > 0 && !props.selectedHouse) {
     mapCenter.value = { lat: newList[0].lat, lng: newList[0].lng };
   }
 });
