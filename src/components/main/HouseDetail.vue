@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, onMounted } from 'vue';
+import { ref, watch, onMounted, nextTick } from 'vue';
 import { Offcanvas } from 'bootstrap';
 import Price from '@/components/common/Price.vue';
 import RoadMap from '@/components/common/RoadMap.vue';
@@ -44,8 +44,9 @@ let offcanvasInstance = null;
 
 watch(
   () => props.show,
-  (newVal) => {
+  async (newVal) => {
     if (newVal) {
+      await nextTick(); // DOM이 업데이트된 후에 실행
       if (offcanvasInstance) {
         offcanvasInstance.dispose();
       }
@@ -55,7 +56,8 @@ watch(
   }
 );
 
-onMounted(() => {
+onMounted(async () => {
+  await nextTick(); // DOM이 업데이트된 후에 실행
   offcanvasInstance = new Offcanvas(offcanvas.value, { backdrop: false });
 });
 

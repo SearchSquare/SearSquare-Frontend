@@ -21,6 +21,9 @@ const firstHouseDeal = ref([]);
 const handleSearch = async (data) => {
   dongCode.value = data;
 
+  selectedHouse.value = null;
+  isHouseDetailVisible.value = false;
+
   infiniteLoadingKey.value = Date.now();
 
   try {
