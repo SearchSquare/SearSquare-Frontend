@@ -42,6 +42,7 @@ let map;
 let roadview;
 let roadviewClient;
 let marker;
+let circle;
 
 // 사용자 정의 마커 이미지
 const markerImageUrl = '/src/assets/marker.png'; // 마커 이미지 URL
@@ -69,6 +70,21 @@ const initializeMap = () => {
     map,
     image: markerImage, // 사용자 정의 마커 이미지를 설정합니다
   });
+
+  // 지도에 표시할 원을 생성합니다
+  circle = new kakao.maps.Circle({
+    center: position, // 원의 중심좌표
+    radius: 250, // 미터 단위의 원의 반지름
+    strokeWeight: 3, // 선의 두께
+    strokeColor: '#C77DFF', // 선의 색깔
+    strokeOpacity: 1, // 선의 불투명도 (0에서 1 사이)
+    strokeStyle: 'line', // 선의 스타일
+    fillColor: '#E0AAFF', // 채우기 색깔
+    fillOpacity: 0.3, // 채우기 불투명도 (0에서 1 사이)
+  });
+
+  // 지도에 원을 표시합니다
+  circle.setMap(map);
 
   roadview = new kakao.maps.Roadview(roadviewContainer.value);
   roadviewClient = new kakao.maps.RoadviewClient();
@@ -110,10 +126,11 @@ onMounted(() => {
 watch(
   () => [props.lat, props.lng],
   () => {
-    if (map && marker && roadview && roadviewClient) {
+    if (map && marker && roadview && roadviewClient && circle) {
       const position = new kakao.maps.LatLng(props.lat, props.lng);
       map.setCenter(position);
       marker.setPosition(position);
+      circle.setPosition(position); // 원의 중심 좌표를 업데이트합니다
       roadviewClient.getNearestPanoId(position, 50, function (panoId) {
         if (panoId) {
           roadview.setPanoId(panoId, position);
