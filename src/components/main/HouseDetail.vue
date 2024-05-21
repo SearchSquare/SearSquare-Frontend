@@ -1,11 +1,12 @@
 <template>
   <div
+    v-if="house"
     class="offcanvas offcanvas-center"
     tabindex="-1"
     ref="offcanvas"
     aria-labelledby="houseDetailSidebarLabel"
   >
-    <div class="offcanvas-header" v-if="house">
+    <div class="offcanvas-header">
       <h5 class="offcanvas-title" id="houseDetailSidebarLabel">{{ house.name }}</h5>
       <button
         type="button"
@@ -14,7 +15,7 @@
         aria-label="Close"
       ></button>
     </div>
-    <div class="offcanvas-body scrollable-container" v-if="house">
+    <div class="offcanvas-body scrollable-container">
       <div class="card">
         <div class="card-body d-flex">
           <div class="col-8 align-items-center info">
@@ -60,7 +61,7 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted } from 'vue';
+import { ref, watch, onMounted, nextTick } from 'vue';
 import Price from '@/components/common/Price.vue';
 import { Offcanvas } from 'bootstrap';
 import RoadMap from '@/components/common/RoadMap.vue';
@@ -102,8 +103,9 @@ let offcanvasInstance = null;
 
 watch(
   () => props.show,
-  (newVal) => {
+  async (newVal) => {
     if (newVal) {
+      await nextTick(); // DOM이 업데이트된 후에 실행
       if (offcanvasInstance) {
         offcanvasInstance.dispose();
       }
@@ -113,7 +115,8 @@ watch(
   }
 );
 
-onMounted(() => {
+onMounted(async () => {
+  await nextTick(); // DOM이 업데이트된 후에 실행
   offcanvasInstance = new Offcanvas(offcanvas.value, { backdrop: false });
 });
 
