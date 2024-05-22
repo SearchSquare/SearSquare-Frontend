@@ -10,26 +10,85 @@ import {
   ArcElement,
 } from 'chart.js';
 import { Bar, Doughnut } from 'vue-chartjs';
-import * as barChartConfig from '@/assets/member.ts';
-import * as doughnutChartConfig from '@/assets/memberGender.ts';
+import { onMounted, ref } from 'vue';
+import { getMemberAge, getMemberGender } from '@/api/admin/memberInfo.js';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
 
-const barData = barChartConfig.data;
-const barOptions = barChartConfig.options;
+const genderData = ref({
+  labels: ref([]),
+  datasets: [
+    {
+      data: ref([]),
+      backgroundColor: [],
+    },
+  ],
+});
 
-const doughnutData = doughnutChartConfig.data;
-const doughnutOptions = doughnutChartConfig.options;
+const ageData = ref({
+  labels: ref([]),
+  datasets: [
+    {
+      label: '',
+      data: ref([]),
+      backgroundColor: '',
+    },
+  ],
+});
+
+const options = {
+  responsive: true,
+  maintainAspectRatio: false,
+};
+
+const fetchData = async () => {
+  try {
+    const responseGender = await getMemberGender();
+    const responseAge = await getMemberAge();
+
+    const genderInfo = responseGender.data.response;
+    const ageInfo = responseAge.data.response;
+    const genderLabel = genderInfo.map((item) => item.gender);
+    const genderDataMap = genderInfo.map((item) => item.memberStats);
+    const ageLabel = ageInfo.map((item) => item.age);
+    const ageDataMap = ageInfo.map((item) => item.memberStats);
+
+    genderData.value = {
+      labels: genderLabel,
+      datasets: [
+        {
+          data: genderDataMap,
+          backgroundColor: ['#41B883', '#E46651', '#00D8FF'],
+        },
+      ],
+    };
+
+    ageData.value = {
+      labels: ageLabel,
+      datasets: [
+        {
+          label: '연령대 별 이용자수',
+          data: ageDataMap,
+          backgroundColor: '#5A189A',
+        },
+      ],
+    };
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+};
+
+onMounted(fetchData);
 </script>
 
 <template>
   <p class="member-info">이용자 정보 통계</p>
   <div class="chart-container row">
     <div class="bar-chart col-3">
-      <Doughnut :data="doughnutData" :options="doughnutOptions" />
+      <Doughnut :data="genderData" :options="options" />
     </div>
     <div class="doughnut-chart col-9">
-      <Bar :data="barData" :options="barOptions" />
+      <Bar :data="ageData" :options="options" />
     </div>
   </div>
   <br />
