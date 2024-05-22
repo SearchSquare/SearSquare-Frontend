@@ -16,8 +16,6 @@ onMounted(async () => {
   const response = await getSido();
   if (response.data.code == 2000) {
     sidoData.value = response.data.response;
-  } else {
-    // TODO: 에러 정하기
   }
 });
 
@@ -26,8 +24,6 @@ const onClickSido = async (item) => {
   const response = await getGugun(selectedSido.value.dongCode);
   if (response.data.code == 2000) {
     gugunData.value = response.data.response;
-  } else {
-    // TODO: 에러 정하기
   }
 };
 
@@ -36,8 +32,6 @@ const onClickGugun = async (item) => {
   const response = await getDong(selectedGugun.value.dongCode);
   if (response.data.code == 2000) {
     dongData.value = response.data.response;
-  } else {
-    // TODO: 에러 정하기
   }
 };
 

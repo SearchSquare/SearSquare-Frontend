@@ -14,6 +14,16 @@ function localAxios() {
     },
   });
 
+  instance.interceptors.request.use((config) => {
+    const token = sessionStorage.getItem('accessToken');
+    console.log(token);
+    console.log(token == null);
+    if (token == null) {
+      router.push({ name: 'Login' });
+    }
+    return config;
+  });
+
   // 응답 인터셉터 추가
   instance.interceptors.response.use(
     (response) => {
@@ -23,8 +33,9 @@ function localAxios() {
     (error) => {
       // 응답 오류가 있는 경우 처리합니다.
       if (error.response) {
-        if (error.response.status == 500) {
-          // 401 Unauthorized 오류가 발생하면 로그인 페이지로 리다이렉트합니다.
+        const status = error.response.status;
+        if (status === 401 || status === 403 || status === 500) {
+          // 401 Unauthorized 또는 403 Forbidden 오류가 발생하면 로그인 페이지로 리다이렉트합니다.
           router.push({ name: 'Login' });
         }
       }
