@@ -14,23 +14,18 @@ import {
 } from 'chart.js';
 
 // ChartJS 필요 구성 요소 등록
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 // 차트 데이터 및 옵션을 설정
-const targetData = ref({
-  labels: ref([]),
-  datasets: [
-    {
-      label: '',
-      data: ref([]),
-      fill: false,
-      borderColor: '',
-      tension: 0,
-    },
-  ],
-});
-
-const aroundData = ref({
+const chartData = ref({
   labels: ref([]),
   datasets: [
     {
@@ -63,9 +58,13 @@ const getAroundPriceList = async (nowHouse) => {
   };
   const response = await getAroundPriceListApi(cond);
   const targetYearList = response.data.response.target.map((item) => item.year);
-  const targetAvgPriceList = response.data.response.target.map((item) => item.avgPrice);
+  const targetAvgPriceList = response.data.response.target.map(
+    (item) => item.avgPrice
+  );
   const aroundYearList = response.data.response.around.map((item) => item.year);
-  const aroundAvgPriceList = response.data.response.around.map((item) => item.avgPrice);
+  const aroundAvgPriceList = response.data.response.around.map(
+    (item) => item.avgPrice
+  );
   return {
     targetYearList,
     targetAvgPriceList,
@@ -77,29 +76,28 @@ const getAroundPriceList = async (nowHouse) => {
 watch(
   () => props.house,
   async (newHouse, oldHouse) => {
-    const { targetYearList, targetAvgPriceList, aroundYearList, aroundAvgPriceList } =
-      await getAroundPriceList(newHouse);
+    const {
+      targetYearList,
+      targetAvgPriceList,
+      aroundYearList,
+      aroundAvgPriceList,
+    } = await getAroundPriceList(newHouse);
     // 차트 데이터 갱신
-    targetData.value = {
+    chartData.value = {
       labels: targetYearList,
       datasets: [
         {
           label: '현재 아파트 평균 매매가',
           data: targetAvgPriceList,
           fill: false,
-          borderColor: '#FF026E',
+          borderColor: '#136f63',
           tension: 0.1,
         },
-      ],
-    };
-    aroundData.value = {
-      labels: aroundYearList,
-      datasets: [
         {
           label: '반경 500m 평균 매매가',
           data: aroundAvgPriceList,
           fill: false,
-          borderColor: '#FEBF0C',
+          borderColor: '#D0FFB7',
           tension: 0.1,
         },
       ],
@@ -111,10 +109,7 @@ watch(
 
 <template>
   <div class="house-chart">
-    <Line :options="chartOptions" :data="targetData" />
-  </div>
-  <div class="house-chart">
-    <Line :options="chartOptions" :data="aroundData" />
+    <Line :options="chartOptions" :data="chartData" />
   </div>
 </template>
 
