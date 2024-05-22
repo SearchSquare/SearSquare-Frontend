@@ -2,19 +2,34 @@ import { localAxios } from '@/util/http-common.js';
 
 const local = localAxios();
 
-function getMemberCount() {
-  const response = local.get(`/admin/rate/members`);
-  return response;
+async function getMemberCount() {
+  try {
+    local.defaults.headers['authorization'] = sessionStorage.getItem('accessToken');
+    const response = await local.get(`/admin/rate/members`);
+    return response;
+  } catch (error) {
+    console.error(error);
+  }
 }
 
-function getMemberGender() {
-  const response = local.get(`/admin/rate/gender`);
-  return response;
+async function getMemberGender() {
+  try {
+    local.defaults.headers['authorization'] = sessionStorage.getItem('accessToken');
+    const response = await local.get(`/admin/rate/gender`);
+    return response;
+  } catch (error) {
+    console.error(error);
+  }
 }
 
-function getMemberAge() {
-  const response = local.get(`/admin/rate/age`);
-  return response;
+async function getMemberAge() {
+  try {
+    local.defaults.headers['authorization'] = sessionStorage.getItem('accessToken');
+    const response = await local.get(`/admin/rate/age`);
+    return response;
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 export { getMemberCount, getMemberGender, getMemberAge };
