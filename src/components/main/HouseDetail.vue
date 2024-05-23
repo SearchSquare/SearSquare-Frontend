@@ -31,7 +31,9 @@ const formatPrice = (price) => {
   if (price === 0) {
     return '거래없음';
   }
-  return `${billion ? `${billion}억` : ''} ${million ? `${million}천만원` : '원'}`;
+  return `${billion ? `${billion}억` : ''} ${
+    million ? `${million}천만원` : '원'
+  }`;
 };
 
 const formatArea = (area) => {
@@ -68,14 +70,18 @@ onMounted(async () => {
 
 const housedeal = ref(props.housedeal);
 let lastHouseDealId = ref(
-  housedeal.value.length ? housedeal.value[housedeal.value.length - 1].houseDealId : null
+  housedeal.value.length
+    ? housedeal.value[housedeal.value.length - 1].houseDealId
+    : null
 );
 
 watch(
   () => props.housedeal,
   (newVal) => {
     housedeal.value = newVal;
-    lastHouseDealId.value = newVal.length ? newVal[newVal.length - 1].houseDealId : null;
+    lastHouseDealId.value = newVal.length
+      ? newVal[newVal.length - 1].houseDealId
+      : null;
     isButtonDisabled.value = newVal.length === 0; // Disable button if housedeal is empty
   },
   { immediate: true }
@@ -83,7 +89,10 @@ watch(
 
 const loadMoreDeals = async () => {
   try {
-    const response = await getSecondHouseDeal(props.house.aptId, lastHouseDealId.value);
+    const response = await getSecondHouseDeal(
+      props.house.aptId,
+      lastHouseDealId.value
+    );
     const newResults = response.data.response;
     if (newResults.length) {
       housedeal.value.push(...newResults);
@@ -169,14 +178,16 @@ watch(
             </p>
             <p>건축년도: {{ house.builtYear }}</p>
           </div>
-          <div class="col-4 d-flex flex-column justify-content-evenly align-items-center priceinfo">
+          <div
+            class="col-4 d-flex flex-column justify-content-evenly align-items-center priceinfo"
+          >
             <Price :price="house.price.maxPrice" label="최고가" />
             <Price :price="house.price.minPrice" label="최저가" />
           </div>
         </div>
       </div>
       <br />
-      <div class="advertisement" v-if="isPopular">
+      <div class="advertisement" v-if="props.house.isPopular">
         <a
           href="https://www.prugio.com/hc/2024/radieuse/?utm_source=naver&utm_medium=cpt&utm_campaign=naver_bad&utm_term=%ED%91%B8%EB%A5%B4%EC%A7%80%EC%98%A4%EB%9D%BC%EB%94%94%EC%9A%B0%EC%8A%A4%ED%8C%8C%ED%81%AC"
           target="_blank"
@@ -208,7 +219,10 @@ watch(
           </div>
         </div>
         <div class="chat-footer">
-          <button @click="gptClicked" :disabled="isButtonDisabled || housedeal.length === 0">
+          <button
+            @click="gptClicked"
+            :disabled="isButtonDisabled || housedeal.length === 0"
+          >
             답변보기
           </button>
         </div>
