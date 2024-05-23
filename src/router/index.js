@@ -55,7 +55,7 @@ const router = createRouter({
 router.beforeEach((to, from) => {
   const memberStore = useMemberStore();
   const { isLogin } = storeToRefs(memberStore);
-  console.log('isLogin=', isLogin.value);
+  console.log('isLogin=', isLogin.value && isLogin.value);
   if (sessionStorage.getItem('accessToken') == null && isLogin.value) {
     isLogin.value = false;
     return { name: 'Login' };
