@@ -114,7 +114,7 @@ const mockApiCall = () => {
         </thead>
         <tbody>
           <tr>
-            <td>https://searchsquare.com/api/v1/</td>
+            <td></td>
             <td>REST API 키</td>
           </tr>
         </tbody>
