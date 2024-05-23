@@ -1,9 +1,9 @@
 <script setup>
 import { getServiceKey, getAroundPrice } from '@/api/apidocs/Apidocs.js';
-import { ref } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 
-const key = ref(null);
-const createdAt = ref(null);
+const serviceKey = ref('');
+const createdAt = ref('');
 const targetYear = ref(null);
 const targetAvgPrice = ref(null);
 const aroundYear = ref(null);
@@ -13,151 +13,368 @@ const fetchData = async () => {
   try {
     const response = await getServiceKey(); // Adjust the endpoint as needed
     const data = response.data.response;
-    key.value = data.serviceKey;
+    serviceKey.value = data.serviceKey;
     createdAt.value = data.createdAt;
     console.log(serviceKey);
   } catch (error) {
-    console.error('Error fetching data:', error);
+    serviceKey.value = '로그인 후 조회 가능합니다.';
+    createdAt.value = '';
   }
 };
 
-// const getAroundPrice = async () => {
-//   try {
-//     const response = await getAroundPrice(); // Adjust the endpoint as needed
-//     const data = response.data.response;
-//     targetYear.value = data.target.year;
-//     targetAvgPrice.value = data.target.avgPrice;
-//     aroundYear.value = data.around.year;
-//     aroundAvgPrice.value = data.around.avgPrice;
-//   } catch (error) {
-//     console.error('Error fetching data:', error);
-//   }
-// };
+const jsonData = ref({
+  code: 'string',
+  message: 'string',
+  response: {
+    target: [
+      {
+        year: 'string',
+        avgPrice: 0,
+      },
+    ],
+    around: [
+      {
+        year: 'string',
+        avgPrice: 0,
+      },
+    ],
+  },
+  isSuccess: true,
+});
+
+const jsonResultData = ref({
+  code: '2000',
+  message: 'OK',
+  response: {
+    target: [
+      {
+        year: '2023-5',
+        avgPrice: 156000,
+      },
+      {
+        year: '2023-7',
+        avgPrice: 86000,
+      },
+      {
+        year: '2024-1',
+        avgPrice: 93400.2,
+      },
+    ],
+    around: [
+      {
+        year: '2023-5',
+        avgPrice: 90000.5,
+      },
+      {
+        year: '2023-7',
+        avgPrice: 73000,
+      },
+      {
+        year: '2024-1',
+        avgPrice: 134400.3,
+      },
+    ],
+  },
+  isSuccess: true,
+});
+
+const scrollToBottom = () => {
+  console.log('dd');
+  window.scrollTo(0, document.body.scrollHeight);
+};
+
+const mockApiCall = () => {
+  jsonData.value = jsonResultData.value;
+  setTimeout(() => {
+    scrollToBottom();
+  }, 100);
+};
+
+onMounted(() => {
+  fetchData();
+});
 </script>
 
 <template>
   <div class="container">
-    <div class="member-token">
-      <h2>홍길동님, 반갑습니다.</h2>
-      <table class="main-table">
-        <colgroup>
-          <col style="width: 66.67%" />
-          <col style="width: 33.33%" />
-        </colgroup>
+    <header class="header">
+      <h1>서치스퀘어 오픈 API</h1>
+    </header>
+    <section class="api-intro">
+      <h2>REST API</h2>
+      <p>
+        이 문서는 위/경도와 공공데이터 포털에서 제공되는 동 코드를 기반으로 평균
+        매매가 조회 API 구현 방법을 소개합니다.
+      </p>
+    </section>
+    <section class="api-intro">
+      <h2>서비스 키 발급</h2>
+      <p>API 요청 시 필요한 서비스 키는 로그인 후 자동으로 발급됩니다!</p>
+      <table class="info-table">
         <thead>
           <tr>
-            <th>인증키</th>
-            <th>발급일자</th>
+            <th>보유중인 키</th>
+            <th>발급 날짜</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>{{ key }}</td>
+            <td>{{ serviceKey }}</td>
             <td>{{ createdAt }}</td>
           </tr>
         </tbody>
       </table>
-      <button class="copy-button" @click="fetchData">인증키 복사</button>
-    </div>
-
-    <div class="service-info">
-      <h2>서비스 정보</h2>
+      <br />
+    </section>
+    <section class="api-details">
+      <h2>특정 아파트와 주변 아파트 월별 평균 매매가 조회</h2>
+      <h4>기본 정보</h4>
       <table class="info-table">
         <thead>
           <tr>
-            <th>데이터포맷</th>
-            <th>End Point</th>
-            <th>인증키</th>
+            <th>메서드</th>
+            <th>URL</th>
+            <th>인증 방식</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>JSON</td>
-            <td>https://www.naver.com</td>
-            <td>{{ key }}</td>
+            <td>GET</td>
+            <td>https://searchsquare.com/api/v1/</td>
+            <td>REST API 키</td>
           </tr>
         </tbody>
       </table>
-    </div>
-
-    <div class="api-info">
-      <table class="api-table">
+      <br />
+      <h4>요청</h4>
+      <h5>헤더</h5>
+      <table class="info-table">
         <thead>
           <tr>
-            <th>NO</th>
+            <th>이름</th>
             <th>설명</th>
-            <th>일일 트래픽</th>
-            <th>미리보기</th>
+            <th>필수</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>1</td>
-            <td>반경 500M내의 아파트 평균 거래가 조회</td>
-            <td>100</td>
-            <td><button class="preview-button">확인</button></td>
+            <td>Authorization</td>
+            <td>Bearer {SERVICE_KEY}</td>
+            <td>REST API 키</td>
           </tr>
         </tbody>
       </table>
+      <br />
+      <h5>쿼리 파라미터</h5>
+      <table class="info-table">
+        <thead>
+          <tr>
+            <th>이름</th>
+            <th>타입</th>
+            <th>설명</th>
+            <th>필수</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>lat</td>
+            <td>double</td>
+            <td>위도</td>
+            <td>O</td>
+          </tr>
+          <tr>
+            <td>lng</td>
+            <td>double</td>
+            <td>경도</td>
+            <td>O</td>
+          </tr>
+          <tr>
+            <td>dong-code</td>
+            <td>String</td>
+            <td>동 코드 (공공데이터 포털 제공)</td>
+            <td>O</td>
+          </tr>
+          <tr>
+            <td>radius</td>
+            <td>Integer</td>
+            <td>반경</td>
+            <td>O</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+    <section class="api-details">
+      <h4>응답</h4>
+      <h5>본문</h5>
+      <table class="info-table">
+        <thead>
+          <tr>
+            <th>이름</th>
+            <th>타입</th>
+            <th>설명</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>code</td>
+            <td>String</td>
+            <td>응답 관련 정보</td>
+          </tr>
+          <tr>
+            <td>message</td>
+            <td>String</td>
+            <td>응답 상태</td>
+          </tr>
+          <tr>
+            <td>response</td>
+            <td>Object</td>
+            <td>조회 결과</td>
+          </tr>
+          <tr>
+            <td>response.target</td>
+            <td>List</td>
+            <td>기준이 되는 아파트 월별 평균 매매가</td>
+          </tr>
+          <tr>
+            <td>response.target.year</td>
+            <td>String</td>
+            <td>매매 날짜</td>
+          </tr>
+          <tr>
+            <td>response.target.avgPrice</td>
+            <td>double</td>
+            <td>평균 매매가</td>
+          </tr>
+          <tr>
+            <td>response.around</td>
+            <td>List</td>
+            <td>주변 아파트 월별 평균 매매가</td>
+          </tr>
+          <tr>
+            <td>response.around.year</td>
+            <td>String</td>
+            <td>매매 날짜</td>
+          </tr>
+          <tr>
+            <td>response.around.avgPrice</td>
+            <td>double</td>
+            <td>평균 매매가</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </div>
+  <div class="json">
+    <pre>{{ jsonData }}</pre>
+    <div>
+      <button
+        @click="mockApiCall"
+        type="button"
+        class="btn btn-primary call-btn"
+      >
+        미리보기
+      </button>
     </div>
   </div>
 </template>
 
 <style scoped>
-.member-token {
-  margin-top: 90px;
-}
-.container {
-  margin-left: 5%;
+.call-btn {
+  width: 100%;
 }
 
-.main-table,
-.info-table,
-.api-table {
-  width: 50%;
+.container {
+  width: 80%;
+  margin-top: 66px;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+.header {
+  background-color: #001f60;
+  color: white;
+  padding: 20px;
+}
+
+.api-intro {
+  background-color: #f2f2f2;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 8px;
+}
+
+.api-intro h2 {
+  margin-bottom: 10px;
+}
+
+.api-intro p {
+  margin-bottom: 20px;
+}
+
+.api-details,
+.api-spec {
+  margin-top: 40px;
+}
+
+.api-details h2,
+.api-details h3,
+.api-details h4,
+.api-spec h2,
+.api-spec h3,
+.api-spec h4 {
+  margin-bottom: 10px;
+}
+
+.info-table {
+  width: 100%;
   border-collapse: collapse;
   margin-top: 10px;
+  table-layout: fixed;
 }
 
-.main-table th,
-.main-table td,
 .info-table th,
-.info-table td,
-.api-table th,
-.api-table td {
+.info-table td {
   border: 1px solid #ddd;
-  padding: 8px;
-}
-
-.main-table th,
-.info-table th,
-.api-table th {
-  background-color: #f2f2f2;
+  padding: 12px;
   text-align: left;
+  word-wrap: break-word;
 }
 
-.copy-button {
+.info-table th {
+  background-color: #f2f2f2;
+}
+
+.spec-table {
+  width: 100%;
+  border-collapse: collapse;
   margin-top: 10px;
-  background-color: #f48fb1;
-  border: none;
-  padding: 10px 20px;
+  table-layout: fixed;
+}
+
+.spec-table th,
+.spec-table td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: left;
+  word-wrap: break-word;
+}
+
+.spec-table th {
+  background-color: #f2f2f2;
+}
+
+.json {
+  width: 80%;
+  margin: 2rem auto;
+  padding: 1rem;
+  background-color: #282c34;
   color: white;
-  cursor: pointer;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  font-family: 'Courier New', Courier, monospace;
 }
-
-.service-info {
-  margin-top: 50px;
-}
-
-.api-info {
-  margin-top: 50px;
-}
-
-.preview-button {
-  background-color: #d1c4e9;
-  border: none;
-  padding: 5px 10px;
-  color: white;
-  cursor: pointer;
+pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
 </style>
