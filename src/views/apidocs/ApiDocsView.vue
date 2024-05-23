@@ -1,4 +1,39 @@
-<script setup></script>
+<script setup>
+import { getServiceKey, getAroundPrice } from '@/api/apidocs/Apidocs.js';
+import { ref } from 'vue';
+
+const key = ref(null);
+const createdAt = ref(null);
+const targetYear = ref(null);
+const targetAvgPrice = ref(null);
+const aroundYear = ref(null);
+const aroundAvgPrice = ref(null);
+
+const fetchData = async () => {
+  try {
+    const response = await getServiceKey(); // Adjust the endpoint as needed
+    const data = response.data.response;
+    key.value = data.serviceKey;
+    createdAt.value = data.createdAt;
+    console.log(serviceKey);
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+};
+
+// const getAroundPrice = async () => {
+//   try {
+//     const response = await getAroundPrice(); // Adjust the endpoint as needed
+//     const data = response.data.response;
+//     targetYear.value = data.target.year;
+//     targetAvgPrice.value = data.target.avgPrice;
+//     aroundYear.value = data.around.year;
+//     aroundAvgPrice.value = data.around.avgPrice;
+//   } catch (error) {
+//     console.error('Error fetching data:', error);
+//   }
+// };
+</script>
 
 <template>
   <div class="container">
@@ -17,12 +52,12 @@
         </thead>
         <tbody>
           <tr>
-            <td>asdfdsafhjdfjkdahfjkbgljeftuakfhfahjfxh</td>
-            <td>2024-01-02</td>
+            <td>{{ key }}</td>
+            <td>{{ createdAt }}</td>
           </tr>
         </tbody>
       </table>
-      <button class="copy-button">인증키 복사</button>
+      <button class="copy-button" @click="fetchData">인증키 복사</button>
     </div>
 
     <div class="service-info">
@@ -39,7 +74,7 @@
           <tr>
             <td>JSON</td>
             <td>https://www.naver.com</td>
-            <td>dfkjslfjdsfkdjfsjkldjfklsdjflkdsjf...mdg</td>
+            <td>{{ key }}</td>
           </tr>
         </tbody>
       </table>
@@ -58,7 +93,7 @@
         <tbody>
           <tr>
             <td>1</td>
-            <td>API 설명</td>
+            <td>반경 500M내의 아파트 평균 거래가 조회</td>
             <td>100</td>
             <td><button class="preview-button">확인</button></td>
           </tr>
