@@ -176,6 +176,14 @@ watch(
         </div>
       </div>
       <br />
+      <div class="advertisement" v-if="isPopular">
+        <a
+          href="https://www.prugio.com/hc/2024/radieuse/?utm_source=naver&utm_medium=cpt&utm_campaign=naver_bad&utm_term=%ED%91%B8%EB%A5%B4%EC%A7%80%EC%98%A4%EB%9D%BC%EB%94%94%EC%9A%B0%EC%8A%A4%ED%8C%8C%ED%81%AC"
+          target="_blank"
+          ><img src="/src/assets/advertisement.jpg"
+        /></a>
+      </div>
+      <br />
       <!-- 지도 -->
       <RoadMap :lat="house.lat" :lng="house.lng" />
       <br />
@@ -239,6 +247,16 @@ watch(
   transform: translate(-100%, 0%);
   position: absolute;
   z-index: 5;
+}
+
+.advertisement {
+  width: 100%;
+  text-align: center;
+}
+
+.advertisement img {
+  width: 100%;
+  height: ;
 }
 
 .info {
