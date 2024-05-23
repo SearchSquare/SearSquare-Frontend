@@ -1,9 +1,9 @@
 <script setup>
 import { getServiceKey, getAroundPrice } from '@/api/apidocs/Apidocs.js';
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 
-const key = ref('API를 사용하기 위해 키를 발급하세요!');
-const createdAt = ref('null');
+const serviceKey = ref('');
+const createdAt = ref('');
 const targetYear = ref(null);
 const targetAvgPrice = ref(null);
 const aroundYear = ref(null);
@@ -13,11 +13,12 @@ const fetchData = async () => {
   try {
     const response = await getServiceKey(); // Adjust the endpoint as needed
     const data = response.data.response;
-    key.value = data.serviceKey;
+    serviceKey.value = data.serviceKey;
     createdAt.value = data.createdAt;
     console.log(serviceKey);
   } catch (error) {
-    console.error('Error fetching data:', error);
+    serviceKey.value = '로그인 후 조회 가능합니다.';
+    createdAt.value = '';
   }
 };
 
@@ -88,6 +89,10 @@ const mockApiCall = () => {
     scrollToBottom();
   }, 100);
 };
+
+onMounted(() => {
+  fetchData();
+});
 </script>
 
 <template>
@@ -104,7 +109,7 @@ const mockApiCall = () => {
     </section>
     <section class="api-intro">
       <h2>서비스 키 발급</h2>
-      <p>API 요청 시 필요한 서비스 키를 발급받으세요!</p>
+      <p>API 요청 시 필요한 서비스 키는 로그인 후 자동으로 발급됩니다!</p>
       <table class="info-table">
         <thead>
           <tr>
@@ -114,15 +119,12 @@ const mockApiCall = () => {
         </thead>
         <tbody>
           <tr>
-            <td></td>
-            <td>REST API 키</td>
+            <td>{{ serviceKey }}</td>
+            <td>{{ createdAt }}</td>
           </tr>
         </tbody>
       </table>
       <br />
-      <button @click="fetchData" type="button" class="btn btn-primary call-btn">
-        인증키 생성
-      </button>
     </section>
     <section class="api-details">
       <h2>특정 아파트와 주변 아파트 월별 평균 매매가 조회</h2>
